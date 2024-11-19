@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\5DanaUOblacima2024.Domain\5DanaUOblacima2024.Domain.csproj" />
   </ItemGroup>
 
 </Project>

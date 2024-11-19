@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\Core\5DanaUOblacima2024.Application\5DanaUOblacima2024.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\5DanaUOblacima2024.Persistence\5DanaUOblacima2024.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
