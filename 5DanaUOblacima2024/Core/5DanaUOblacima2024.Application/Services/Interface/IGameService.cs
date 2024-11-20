@@ -12,7 +12,7 @@ namespace _5DanaUOblacima2024.Application.Services.Interface
     {
         Game GetGameById(Guid id);
         List<Game> GetAllGames();
-        void AddGame(CreateGameDto game);
+        bool AddGame(CreateGameDto game);
         Game UpdateGame(Game game);
         void DeleteGame(Guid id);
     }

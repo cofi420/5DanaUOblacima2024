@@ -29,7 +29,7 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
 
         public List<Player> GetAllPlayers()
         {
-            throw new NotImplementedException();
+            return _unitOfWork.PlayerRepository.GetAll();
         }
 
         public Player? AddPlayer(CreatePlayerDto playerDto)
@@ -49,6 +49,11 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
         }
 
         public void DeletePlayer(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Player GetPlayerByNickname(string nickname)
         {
             throw new NotImplementedException();
         }

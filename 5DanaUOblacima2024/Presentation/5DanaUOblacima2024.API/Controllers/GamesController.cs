@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace _5DanaUOblacima2024.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("matches")]
     public class GamesController: ControllerBase
     {
         private readonly IGameService _gameService;
@@ -25,8 +25,10 @@ namespace _5DanaUOblacima2024.API.Controllers
         [HttpPost]
         public IActionResult CreateGame([FromBody] CreateGameDto gameDto)
         {
-            _gameService.AddGame(gameDto);
-            return Ok();
+            var success = _gameService.AddGame(gameDto);
+            if (success)
+                return Ok();
+            return BadRequest();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace _5DanaUOblacima2024.Application.Dto
 {
     public class CreateTeamDto
     {
-        public string Name { get; set; }
-        public List<Guid> PlayerIds { get; set; }
+        public string TeamName { get; set; }
+        public List<Guid> Players { get; set; }
     }
 }

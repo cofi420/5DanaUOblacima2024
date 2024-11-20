@@ -12,8 +12,8 @@ namespace _5DanaUOblacima2024.Domain.Entities
         public Guid Team1Id { get; set; }
         public Team Team2 { get; set; }
         public Guid Team2Id { get; set; }
-        public Team Winner { get; set; }
-        public Guid WinnerId { get; set; }
+        public Team? Winner { get; set; }
+        public Guid? WinnerId { get; set; }
         public int Duration { get; set; }
         public Game(Team team1, Team team2, Team winner, int duration)
         {

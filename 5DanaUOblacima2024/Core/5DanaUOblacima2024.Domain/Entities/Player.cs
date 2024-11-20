@@ -14,8 +14,6 @@ namespace _5DanaUOblacima2024.Domain.Entities
 
         public int Elo { get; set; }
         public int HoursPlayed { get; set; }
-        public Team Team { get; set; }
-        public Guid TeamId { get; set; }
         public int RatingAdjustment { get; set; }
         public Player(string nickname)
         {

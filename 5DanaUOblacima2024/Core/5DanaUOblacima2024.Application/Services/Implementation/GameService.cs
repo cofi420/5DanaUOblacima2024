@@ -29,24 +29,37 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public void AddGame(CreateGameDto game)
+        public bool AddGame(CreateGameDto game)
         {
+            if (game.Duration < 1)
+                return false;
+
             var team1 = _unitOfWork.TeamRepository.GetById(game.Team1Id);
             var team2 = _unitOfWork.TeamRepository.GetById(game.Team2Id);
-            if (game.WinnerId == null)
+            if (team1 == null
+                || team2 == null
+                || (game.WinningTeamId != game.Team1Id
+                    && game.WinningTeamId != game.Team2Id
+                    && game.WinningTeamId != null))
+                return false;
+            if (game.WinningTeamId == null)
             {
                 var newGame = new Game(team1, team2, null, game.Duration);
-                AdjustStatsDraw(newGame);
+                AdjustStatsForTeam(newGame, team1, 0.5);
+                AdjustStatsForTeam(newGame, team2, 0.5);
                 _unitOfWork.GameRepository.Add(newGame);
             }
             else
             {
-                var winner = team1.Id == game.WinnerId ? team1 : team2;
-                var loser = team1.Id == game.WinnerId ? team2 : team1;
+                var winner = team1.Id == game.WinningTeamId ? team1 : team2;
+                var loser = team1.Id == game.WinningTeamId ? team2 : team1;
                 var newGame = new Game(team1, team2, winner, game.Duration);
-                AdjustStatsNonDraw(newGame);
+                AdjustStatsForTeam(newGame, winner, 1);
+                AdjustStatsForTeam(newGame, loser, 0);
                 _unitOfWork.GameRepository.Add(newGame);
             }
+
+            return true;
         }
 
         private int GetRatingAdjustment(Player player)
@@ -71,63 +84,39 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
             {
                 return 10;
             }
-        }
-        private void AdjustStatsDraw(Game game)
-        {
-            foreach (var player in game.Team1.Players)
-            {
-                double s = 0.5;
-                player.HoursPlayed += game.Duration;
-                player.RatingAdjustment = GetRatingAdjustment(player);
-                double expectedElo = 1 / (1 + Math.Pow(10, (GetAverageTeamRating(game.Team2) - player.Elo) / 400));
-                double newElo = player.Elo + player.RatingAdjustment * (s - expectedElo);
-                player.Elo = (int)newElo;
-                _unitOfWork.PlayerRepository.Update(player, player.Id);
-            }
-            foreach (var player in game.Team2.Players)
-            {
-                double s = 0.5;
-                player.HoursPlayed += game.Duration;
-                player.RatingAdjustment = GetRatingAdjustment(player);
-                double expectedElo = 1 / (1 + Math.Pow(10, (GetAverageTeamRating(game.Team1) - player.Elo) / 400));
-                double newElo = player.Elo + player.RatingAdjustment * (s - expectedElo);
-                player.Elo = (int)newElo;
-                _unitOfWork.PlayerRepository.Update(player, player.Id);
-            }
+
+            return 0;
         }
 
-        private int GetAverageTeamRating(Team team)
+        private double GetAverageTeamRating(Team team)
         {
-            int sum = 0;
+            double sum = 0;
             foreach (var player in team.Players)
             {
                 sum += player.Elo;
             }
             return sum / team.Players.Count;
         }
-        private void AdjustStatsNonDraw(Game game, Team winner, Team loser)
+
+        private void AdjustStatsForTeam(Game game, Team team, double s)
         {
-            foreach (var player in winner.Players)
+            foreach (var player in team.Players)
             {
-                double s = 0.5;
-                player.HoursPlayed += game.Duration;
-                player.RatingAdjustment = GetRatingAdjustment(player);
-                player.Wins++;
-                double expectedElo = 1 / (1 + Math.Pow(10, (GetAverageTeamRating(game.Team2) - player.Elo) / 400));
-                double newElo = player.Elo + player.RatingAdjustment * (s - expectedElo);
-                player.Elo = (int)newElo;
-                _unitOfWork.PlayerRepository.Update(player, player.Id);
-            }
-            foreach (var player in loser.Players)
-            {
-                double s = 0.5;
-                player.HoursPlayed += game.Duration;
-                player.RatingAdjustment = GetRatingAdjustment(player);
-                player.Losses++;
-                double expectedElo = 1 / (1 + Math.Pow(10, (GetAverageTeamRating(game.Team1) - player.Elo) / 400));
-                double newElo = player.Elo + player.RatingAdjustment * (s - expectedElo);
-                player.Elo = (int)newElo;
-                _unitOfWork.PlayerRepository.Update(player, player.Id);
+                var newPlayer = new Player(player);
+                newPlayer.HoursPlayed += game.Duration;
+                newPlayer.RatingAdjustment = GetRatingAdjustment(player);
+                if (s == 1)
+                {
+                    newPlayer.Wins++;
+                }
+                else if (s == 0)
+                {
+                    newPlayer.Losses++;
+                }
+                double expectedElo = 1 / (1 + Math.Round(Math.Pow(10, (GetAverageTeamRating(game.Team2) - player.Elo) / 400)));
+                double newElo = player.Elo + newPlayer.RatingAdjustment * (s - expectedElo);
+                newPlayer.Elo = (int)newElo;
+                _unitOfWork.PlayerRepository.Update(newPlayer, newPlayer.Id);
             }
         }
         public Game UpdateGame(Game game)

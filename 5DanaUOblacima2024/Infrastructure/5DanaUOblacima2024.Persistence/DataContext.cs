@@ -19,10 +19,8 @@ namespace _5DanaUOblacima2024.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Team-Player relationship
-            modelBuilder.Entity<Player>()
-                .HasOne(p => p.Team)
-                .WithMany(t => t.Players)
-                .HasForeignKey(p => p.TeamId);
+            modelBuilder.Entity<Team>()
+                .HasMany(t => t.Players);
 
             // Game-Team relationships
             modelBuilder.Entity<Game>()

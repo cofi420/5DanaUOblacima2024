@@ -30,14 +30,13 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
 
         public List<Team> GetAllTeams()
         {
-            throw new NotImplementedException();
+            return _unitOfWork.TeamRepository.GetAll();
         }
 
         public Team? AddTeam(CreateTeamDto teamDto)
         {
-            
             List<Player> players = new List<Player>();
-            foreach(var p in teamDto.PlayerIds)
+            foreach(var p in teamDto.Players)
             {
                 var player = _unitOfWork.PlayerRepository.GetById(p);
                 if (player == null)
@@ -46,27 +45,24 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
                 }
                 players.Add(player);
             }
-            if (PlayersConflict(players))
+            if (PlayersConflict(players, _unitOfWork.TeamRepository))
             {
                 return null;
             }
-            var team = new Team(players, teamDto.Name);
-            foreach (var p in players)
-            {
-                p.Team = team;
-                p.TeamId = team.Id;
-                _unitOfWork.PlayerRepository.Update(p, p.Id);
-            }
+            var team = new Team(players, teamDto.TeamName);
             _unitOfWork.TeamRepository.Add(team);
             return team;
         }
-        private static bool PlayersConflict(List<Player> players)
+        private static bool PlayersConflict(List<Player> players, ITeamRepository teamRepository)
         {
             foreach (var p in players)
             {
-                if (p.Team != null)
+                foreach (var team in teamRepository.GetAll())
                 {
-                    return true;
+                    if (team.Players.Contains(p))
+                    {
+                        return true;
+                    }
                 }
             }
 

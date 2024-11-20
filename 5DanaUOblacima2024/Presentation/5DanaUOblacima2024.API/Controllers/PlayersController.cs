@@ -15,6 +15,12 @@ namespace _5DanaUOblacima2024.API.Controllers
         {
             _playerService = playerService;
         }
+
+        [HttpGet]
+        public IActionResult GetPlayers()
+        {
+            return Ok(_playerService.GetAllPlayers());
+        }
         [HttpGet("{playerId}")]
         public IActionResult GetPlayerById(Guid playerId)
         {
@@ -25,7 +31,7 @@ namespace _5DanaUOblacima2024.API.Controllers
             return Ok(_playerService.GetPlayerById(playerId));
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public IActionResult CreatePlayer([FromBody] CreatePlayerDto playerDto)
         {
             var player = _playerService.AddPlayer(playerDto);

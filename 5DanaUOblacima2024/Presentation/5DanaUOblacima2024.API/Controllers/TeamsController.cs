@@ -14,6 +14,12 @@ namespace _5DanaUOblacima2024.API.Controllers
         {
             _teamService = teamService;
         }
+
+        [HttpGet]
+        public IActionResult GetTeams()
+        {
+            return Ok(_teamService.GetAllTeams());
+        }
         [HttpGet("{teamId}")]
         public IActionResult GetTeamById(Guid teamId)
         {
@@ -28,6 +34,10 @@ namespace _5DanaUOblacima2024.API.Controllers
         public IActionResult CreateTeam([FromBody] CreateTeamDto teamDto)
         {
             var team = _teamService.AddTeam(teamDto);
+            if (team == null)
+            {
+                return BadRequest();
+            }
             return Ok(team);
         }
     }
