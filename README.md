@@ -21,30 +21,37 @@ Follow these steps to build and run the application locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd <repository-directory>
-
+git clone https://github.com/cofi420/5DanaUOblacima2024.git
+cd 5DanaUOblacima2024/
+```
 ### 2. Restore dependencies
 Use the following command to restore NuGet packages:
 dotnet restore
 
 ### 3. Build the application
 Build the project to ensure everything compiles correctly:
+```
 dotnet build
+```
 
 ## Running the Application
 The project includes multiple profiles defined in the launchSettings.json file. You can run the application in different configurations.
 
 ### 1. Using HTTPS Profile
 To run the application with HTTPS, execute:
+```
 dotnet run --launch-profile https
+```
+
 Application URL: https://localhost:443 or http://localhost:8080
 Swagger UI: https://localhost:443/swagger
 ### 2. Using HTTP Profile
 To run the application without HTTPS, execute:
-!IMPORTANT: Run this one for correct port and http protocol for postman tests
+**!IMPORTANT: Run this one for correct port and http protocol for postman tests**
 
+```
 dotnet run --launch-profile http
+```
 Application URL: http://localhost:8080
 Swagger UI: http://localhost:8080/swagger
 ### 3. Using IIS Express (Visual Studio Only)
@@ -59,20 +66,21 @@ http://localhost:8080/swagger
 https://localhost:443/swagger
 Use the Swagger UI to explore and test the endpoints.
 
-## Customizing Environment
+### Customizing Environment
 The ASPNETCORE_ENVIRONMENT variable in launchSettings.json is set to Development by default. You can change it to other environments (e.g., Production) if required.
 
-## Troubleshooting
+### Troubleshooting
 # 1. Port Conflicts:
 
 Ensure the ports defined in applicationUrl are not already in use.
 Change the ports in launchSettings.json if needed.
-# 2. SSL Certificate Issues:
+### 2. SSL Certificate Issues:
 
 Trust the development certificate by running:
-
+```
 dotnet dev-certs https --trust
+```
 
-# 3.Missing Dependencies:
+### 3.Missing Dependencies:
 
 Run dotnet restore to fetch any missing dependencies.
