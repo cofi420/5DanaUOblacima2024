@@ -33,16 +33,44 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public Team AddTeam(CreateTeamDto teamDto)
+        public Team? AddTeam(CreateTeamDto teamDto)
         {
+            
             List<Player> players = new List<Player>();
             foreach(var p in teamDto.PlayerIds)
             {
-                players.Add(_unitOfWork.PlayerRepository.GetById(p));
+                var player = _unitOfWork.PlayerRepository.GetById(p);
+                if (player == null)
+                {
+                    return null;
+                }
+                players.Add(player);
+            }
+            if (PlayersConflict(players))
+            {
+                return null;
             }
             var team = new Team(players, teamDto.Name);
+            foreach (var p in players)
+            {
+                p.Team = team;
+                p.TeamId = team.Id;
+                _unitOfWork.PlayerRepository.Update(p, p.Id);
+            }
             _unitOfWork.TeamRepository.Add(team);
             return team;
+        }
+        private static bool PlayersConflict(List<Player> players)
+        {
+            foreach (var p in players)
+            {
+                if (p.Team != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public Team UpdateTeam(Team team)

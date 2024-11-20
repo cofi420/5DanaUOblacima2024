@@ -17,7 +17,12 @@ namespace _5DanaUOblacima2024.API.Controllers
         [HttpGet("{teamId}")]
         public IActionResult GetTeamById(Guid teamId)
         {
-            return Ok(_teamService.GetTeamById(teamId));
+            var team = _teamService.GetTeamById(teamId);
+            if (team == null)
+            {
+                return NotFound();
+            }
+            return Ok(team);
         }
         [HttpPost]
         public IActionResult CreateTeam([FromBody] CreateTeamDto teamDto)

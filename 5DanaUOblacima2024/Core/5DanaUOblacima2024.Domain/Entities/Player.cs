@@ -32,5 +32,16 @@ namespace _5DanaUOblacima2024.Domain.Entities
         {
             
         }
+
+        public Player(Player p)
+        {
+            Id = p.Id;
+            Nickname = p.Nickname;
+            Wins = p.Wins;
+            Losses = p.Losses;
+            Elo = p.Elo;
+            HoursPlayed = p.HoursPlayed;
+            RatingAdjustment = p.RatingAdjustment;
+        }
     }
 }

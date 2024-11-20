@@ -13,7 +13,7 @@ namespace _5DanaUOblacima2024.Application.Services.Interface
         Team? GetTeamById(Guid id);
         Team GetTeamByName(string name);
         List<Team> GetAllTeams();
-        Team AddTeam(CreateTeamDto teamDto);
+        Team? AddTeam(CreateTeamDto teamDto);
         Team UpdateTeam(Team team);
         void DeleteTeam(Guid id);
     }
