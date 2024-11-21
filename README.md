@@ -2,7 +2,7 @@
 
 First round project that calculates elo for esports players.
 By Filip Vidakovic
-filip.vidaokovic.04@gmail.com
+filip.vidakovic.04@gmail.com
 ---
 
 ## Prerequisites
