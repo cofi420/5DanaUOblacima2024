@@ -35,6 +35,10 @@ namespace _5DanaUOblacima2024.Application.Services.Implementation
 
         public Team? AddTeam(CreateTeamDto teamDto)
         {
+            if (!_unitOfWork.TeamRepository.IsNameUnique(teamDto.TeamName))
+            {
+                return null;
+            }
             List<Player> players = new List<Player>();
             foreach(var p in teamDto.Players)
             {

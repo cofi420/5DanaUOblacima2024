@@ -9,6 +9,6 @@ namespace _5DanaUOblacima2024.Application.Contracts
 {
     public interface ITeamRepository: ICrudRepository<Team>
     {
-
+        bool IsNameUnique(string name);
     }
 }

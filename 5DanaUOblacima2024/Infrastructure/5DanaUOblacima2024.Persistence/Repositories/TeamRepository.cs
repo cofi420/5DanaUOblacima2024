@@ -25,5 +25,10 @@ namespace _5DanaUOblacima2024.Persistence.Repositories
         {
             return Entities.Include(t => t.Players).FirstOrDefault(t => t.Id == id);
         }
+
+        public bool IsNameUnique(string name)
+        {
+            return Entities.All(t => t.Name!= name);
+        }
     }
 }
