@@ -1,7 +1,8 @@
 # 5 Dana u oblacima 2024
 
 First round project that calculates elo for esports players.
-
+By Filip Vidakovic
+filip.vidaokovic.04@gmail.com
 ---
 
 ## Prerequisites
